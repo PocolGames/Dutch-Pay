@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>더치페이 계산기 | Dutch Pay Calculator</title>
+    <meta name="description" content="간편하고 정확한 더치페이 계산기로 음식값을 공평하게 나누어 보세요.">
+    <meta name="keywords" content="더치페이, 계산기, 음식값, 나누기, 정산">
+    
+    <!-- CSS 파일 연결 -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    
+    <!-- Favicon (선택사항) -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+</head>
+<body>
+    <!-- 헤더 섹션 -->
+    <header class="header">
+        <div class="container">
+            <h1>🍽️ 더치페이 계산기</h1>
+            <p>음식값을 공평하게 나누어 계산해보세요!</p>
+        </div>
+    </header>
+
+    <!-- 메인 컨테이너 -->
+    <main class="container">
+        <!-- 메시지 표시 영역 -->
+        <div id="messageContainer"></div>
+
+        <!-- 메뉴 관리 섹션 -->
+        <section class="section">
+            <h2 class="section-title">📋 메뉴 관리</h2>
+            
+            <!-- 메뉴 입력 폼 -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+                <div class="input-group">
+                    <label for="menuName">메뉴명</label>
+                    <input type="text" id="menuName" placeholder="예: 삼겹살" maxlength="50">
+                </div>
+                
+                <div class="input-group">
+                    <label for="menuPrice">단가 (원)</label>
+                    <input type="number" id="menuPrice" placeholder="15000" min="0" max="1000000">
+                </div>
+                
+                <div class="input-group">
+                    <label for="menuQuantity">수량</label>
+                    <input type="number" id="menuQuantity" value="1" min="1" max="100">
+                </div>
+                
+                <div class="input-group">
+                    <label>&nbsp;</label>
+                    <button type="button" id="addMenuBtn" class="btn btn-primary">메뉴 추가</button>
+                </div>
+            </div>
+            
+            <!-- 메뉴 목록 테이블 -->
+            <div style="overflow-x: auto;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>메뉴명</th>
+                            <th>단가</th>
+                            <th>수량</th>
+                            <th>합계</th>
+                            <th>작업</th>
+                        </tr>
+                    </thead>
+                    <tbody id="menuTableBody">
+                        <!-- 동적으로 생성되는 메뉴 목록 -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="totalAmount" style="text-align: right; font-size: 1.2rem; font-weight: bold; margin-top: 1rem; color: #667eea;">
+                총 금액: 0원
+            </div>
+        </section>
+
+        <!-- 참가자 관리 섹션 -->
+        <section class="section">
+            <h2 class="section-title">👥 참가자 관리</h2>
+            
+            <!-- 참가자 입력 폼 -->
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem; align-items: end;">
+                <div class="input-group" style="flex: 1;">
+                    <label for="participantName">참가자 이름</label>
+                    <input type="text" id="participantName" placeholder="예: 홍길동" maxlength="20">
+                </div>
+                
+                <button type="button" id="addParticipantBtn" class="btn btn-primary">참가자 추가</button>
+            </div>
+            
+            <!-- 참가자 목록 -->
+            <div id="participantsList">
+                <!-- 동적으로 생성되는 참가자 목록 -->
+            </div>
+        </section>
+
+        <!-- 소비 매핑 섹션 -->
+        <section class="section">
+            <h2 class="section-title">🎯 소비 매핑</h2>
+            <p style="margin-bottom: 1rem; color: #666;">
+                각 참가자가 어떤 메뉴를 얼마나 소비했는지 입력해주세요. 
+                <small>(숫자는 소비한 개수를 의미합니다)</small>
+            </p>
+            
+            <!-- 소비 매트릭스 테이블 -->
+            <div id="consumptionMatrix" style="overflow-x: auto;">
+                <!-- 동적으로 생성되는 소비 매트릭스 -->
+            </div>
+        </section>
+
+        <!-- 계산 및 제어 버튼 섹션 -->
+        <section class="section">
+            <h2 class="section-title">🔧 계산 제어</h2>
+            
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+                <button type="button" id="calculateBtn" class="btn btn-success">
+                    💰 계산하기
+                </button>
+                
+                <button type="button" id="resetBtn" class="btn btn-danger">
+                    🔄 전체 초기화
+                </button>
+            </div>
+            
+            <!-- 추가 옵션 -->
+            <div style="margin-top: 1rem; text-align: center;">
+                <label style="display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <input type="checkbox" id="autoCalculate">
+                    <span>실시간 자동 계산</span>
+                </label>
+            </div>
+        </section>
+
+        <!-- 계산 결과 섹션 -->
+        <div id="resultsContainer">
+            <!-- 동적으로 생성되는 계산 결과 -->
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <footer style="text-align: center; padding: 2rem; margin-top: 3rem; background-color: #f8f9fa; color: #666;">
+        <p>&copy; 2025 더치페이 계산기. 모든 권리 보유.</p>
+        <p style="font-size: 0.9rem; margin-top: 0.5rem;">
+            정확한 계산으로 공평한 정산을 도와드립니다.
+        </p>
+    </footer>
+
+    <!-- JavaScript 파일 연결 -->
+    <script src="js/main.js"></script>
+    <script src="js/calculator.js"></script>
+    <script src="js/ui.js"></script>
+
+    <!-- 페이지 로딩 완료 후 초기화 -->
+    <script>
+        // 추가적인 초기화 작업이 필요한 경우 여기에 작성
+        window.addEventListener('load', function() {
+            console.log('더치페이 계산기가 완전히 로드되었습니다.');
+        });
+    </script>
+</body>
+</html>
